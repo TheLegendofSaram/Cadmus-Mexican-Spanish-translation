@@ -15,6 +15,8 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.piston.PistonStructureResolver;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.entity.EntityEvent;
@@ -38,6 +40,7 @@ import net.minecraftforge.fml.common.Mod;
 
 @Mod(Cadmus.MOD_ID)
 public class CadmusForge {
+
     public CadmusForge() {
         Cadmus.init();
 
@@ -109,7 +112,8 @@ public class CadmusForge {
 
     private static void onBlockInteract(PlayerInteractEvent.RightClickBlock event) {
         if (!ClaimApi.API.canInteractWithBlock(event.getEntity().level(), event.getPos(), InteractionType.USE, event.getEntity())) {
-            event.setCanceled(true);
+            event.setUseItem(Event.Result.ALLOW);
+            event.setUseBlock(Event.Result.DENY);
         }
     }
 
@@ -126,7 +130,7 @@ public class CadmusForge {
     }
 
     private static void onAttackBlock(PlayerInteractEvent.LeftClickBlock event) {
-        if (!ClaimApi.API.canInteractWithBlock(event.getEntity().level(), event.getPos(), InteractionType.ATTACK, event.getEntity())) {
+        if (!ClaimApi.API.canBreakBlock(event.getEntity().level(), event.getPos(), event.getEntity())) {
             event.setCanceled(true);
         }
     }

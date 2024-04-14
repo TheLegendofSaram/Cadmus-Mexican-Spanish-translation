@@ -3,9 +3,11 @@ package earth.terrarium.cadmus.common.compat.prometheus;
 import com.teamresourceful.resourcefullib.common.utils.TriState;
 import com.teamresourceful.resourcefullib.common.utils.modinfo.ModInfoUtils;
 import earth.terrarium.cadmus.api.claims.maxclaims.MaxClaimProviderApi;
+import earth.terrarium.cadmus.common.claims.CadmusDataHandler;
 import earth.terrarium.cadmus.common.compat.prometheus.roles.CadmusOptions;
 import earth.terrarium.cadmus.common.compat.prometheus.roles.client.CadmusOptionsDisplay;
 import earth.terrarium.prometheus.Prometheus;
+import earth.terrarium.prometheus.api.events.ServerRolesUpdatedEvent;
 import earth.terrarium.prometheus.api.permissions.PermissionApi;
 import earth.terrarium.prometheus.api.roles.RoleApi;
 import earth.terrarium.prometheus.api.roles.client.OptionDisplayApi;
@@ -17,6 +19,7 @@ import net.minecraft.world.level.Level;
 import java.util.UUID;
 
 public class PrometheusIntegration {
+
     public static final ResourceLocation PROMETHEUS_ID = new ResourceLocation(Prometheus.MOD_ID, Prometheus.MOD_ID);
 
     public static boolean prometheusLoaded() {
@@ -51,6 +54,10 @@ public class PrometheusIntegration {
         PermissionApi.API.addDefaultPermission(CadmusAutoCompletes.PERSONAL_BLOCK_INTERACTIONS, TriState.TRUE);
         PermissionApi.API.addDefaultPermission(CadmusAutoCompletes.PERSONAL_ENTITY_INTERACTIONS, TriState.TRUE);
         PermissionApi.API.addDefaultPermission(CadmusAutoCompletes.PERSONAL_ENTITY_DAMAGE, TriState.TRUE);
+
+        ServerRolesUpdatedEvent.register(event ->
+            CadmusDataHandler.getMaxTeamClaims(event.server()).keySet().forEach(id ->
+                MaxClaimProviderApi.API.getSelected().calculate(id, event.server())));
     }
 
     public static boolean hasPermission(Player player, String permission) {
