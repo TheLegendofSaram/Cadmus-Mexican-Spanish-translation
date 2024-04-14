@@ -15,8 +15,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.ChunkPos;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.piston.PistonStructureResolver;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.entity.EntityEvent;
